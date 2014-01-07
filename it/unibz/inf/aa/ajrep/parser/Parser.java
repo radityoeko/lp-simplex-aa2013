@@ -1,8 +1,11 @@
 package it.unibz.inf.aa.ajrep.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class represents the parser of the program. It defines the methods to
@@ -35,23 +38,25 @@ public class Parser {
      */
     ArrayList<Double> varValueList = new ArrayList<Double>();
 
-    ArrayList<Double> maxMinF = new ArrayList<Double>();
+    ArrayList<Double> objectiveF;
 
     ArrayList<ArrayList<Double>> cMatrix = new ArrayList<ArrayList<Double>>();
 
     boolean maximize;
+
+    int varCount;
 
     /**
      * Parse variable from an input string. The variables are separated by
      * spaces by default.
      * 
      * @param input
-     *            the input string containing variables separated by spaces
-     * @throws Exception
-     *             when the input string is not valid.
+     *            the input string containing variables separated by commas
+     * @throws IllegalVariableNameException
+     *             when the input string contains variable with illegal name.
      */
     public void parseVariable(String input) throws IllegalVariableNameException {
-	parseVariable(input, " ");
+	parseVariable(input, ",");
     }
 
     /**
@@ -66,8 +71,8 @@ public class Parser {
      *            the input string containing variables separated by spaces
      * @param delimiter
      *            the delimiter string
-     * @throws Exception
-     *             when the input string is not valid.
+     * @throws IllegalVariableNameException
+     *             when the input string contains variable with illegal name.
      */
     public void parseVariable(String input, String delimiter)
 	    throws IllegalVariableNameException {
@@ -83,6 +88,8 @@ public class Parser {
 	    varMapper.put(s, varCounter);
 	    varCounter++;
 	}
+
+	varCount = varCounter;
     }
 
     /**
@@ -97,6 +104,60 @@ public class Parser {
     }
 
     public String toString() {
-	return varNameList.toString();
+	StringBuilder sb = new StringBuilder();
+	sb.append("Variables: " + varNameList.toString() + "\n");
+	sb.append("Objective function: " + objectiveF.toString() + "\n");
+	return sb.toString();
+    }
+
+    /**
+     * This method parses objective function into
+     * <code>ArrayList objectiveF</code> of the coefficient of each variables
+     * appearing in objective function. The coefficient is sorted in
+     * <code>objectiveF</code> based on the index of its corresponding variable.
+     * The variables not appearing in the objective function has its coefficient
+     * assigned to 0.
+     * 
+     * @param f
+     *            the objetive function as a string
+     * @throws NullPointerException
+     *             when there is undeclared variable in the formula
+     */
+    public void parseObjectiveFunction(String f) throws NullPointerException {
+	Double[] d = new Double[varCount];
+	Arrays.fill(d, 0.0);
+
+	f = f.replaceAll("\\s", ""); // remove all whitespaces first
+
+	Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
+	Matcher mWholeEq = pWholeEq.matcher(f);
+
+	while (mWholeEq.find()) {
+	    String sEachVar = mWholeEq.group();
+	    Pattern pEachVar = Pattern.compile("[a-zA-Z]+[0-9]*");
+	    Matcher mEachVar = pEachVar.matcher(sEachVar);
+
+	    mEachVar.find();
+	    String varName = mEachVar.group();
+	    if (varMapper.get(varName) == null) {
+		throw new NullPointerException(
+			"You have undeclared variables in your objective function.");
+	    }
+
+	    pEachVar = Pattern.compile("-?[0-9]*");
+	    mEachVar = pEachVar.matcher(sEachVar);
+	    mEachVar.find();
+	    String coefficient = mEachVar.group();
+
+	    if (coefficient.equals(""))
+		d[varMapper.get(varName)] = 1.0;
+	    else if (coefficient.equals("-"))
+		d[varMapper.get(varName)] = -1.0;
+	    else
+		d[varMapper.get(varName)] = Double.parseDouble(coefficient);
+
+	    objectiveF = new ArrayList<Double>(Arrays.asList(d));
+	}
+
     }
 }
