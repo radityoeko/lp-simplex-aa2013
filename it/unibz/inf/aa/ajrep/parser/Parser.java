@@ -48,7 +48,7 @@ public class Parser {
 
     /**
      * Parse variable from an input string. The variables are separated by
-     * spaces by default.
+     * commas by default.
      * 
      * @param input
      *            the input string containing variables separated by commas
@@ -74,7 +74,7 @@ public class Parser {
      * @throws IllegalVariableNameException
      *             when the input string contains variable with illegal name.
      */
-    public void parseVariable(String input, String delimiter)
+    private void parseVariable(String input, String delimiter)
 	    throws IllegalVariableNameException {
 	StringTokenizer st = new StringTokenizer(input, delimiter);
 
@@ -107,19 +107,20 @@ public class Parser {
 	StringBuilder sb = new StringBuilder();
 	sb.append("Variables: " + varNameList.toString() + "\n");
 	sb.append("Objective function: " + objectiveF.toString() + "\n");
+	sb.append("Constraints: " + cMatrix.toString());
 	return sb.toString();
     }
 
     /**
      * This method parses objective function into
      * <code>ArrayList objectiveF</code> of the coefficient of each variables
-     * appearing in objective function. The coefficient is sorted in
+     * appearing in the objective function. The coefficient is sorted in
      * <code>objectiveF</code> based on the index of its corresponding variable.
-     * The variables not appearing in the objective function has its coefficient
-     * assigned to 0.
+     * The variables not appearing in the objective function have their
+     * coefficient assigned to 0.
      * 
      * @param f
-     *            the objetive function as a string
+     *            the objective function as a string
      * @throws NullPointerException
      *             when there is undeclared variable in the formula
      */
@@ -133,31 +134,138 @@ public class Parser {
 	Matcher mWholeEq = pWholeEq.matcher(f);
 
 	while (mWholeEq.find()) {
-	    String sEachVar = mWholeEq.group();
+	    /*
+	     * for each pair of coefficient and variable, we extract the
+	     * coefficient as a double and variable as a string using the simple
+	     * inner class <code>SimpleExpression</code>
+	     */
+	    SimpleExpression se = new SimpleExpression(mWholeEq.group(),
+		    "objective function");
+
+	    d[varMapper.get(se.varName)] = se.coefficient;
+	}
+
+	objectiveF = new ArrayList<Double>(Arrays.asList(d));
+    }
+
+    /**
+     * See documentation on
+     * <code>parseConstraints(String c, String delim)</code> This is an
+     * overloaded function, with <code>delim</code> is set to ","
+     * 
+     * @param c
+     * @throws NullPointerException
+     */
+    public void parseConstraints(String c) throws NullPointerException {
+	parseConstraints(c, ",");
+    }
+
+    /**
+     * This method parse the constraint expressions into two-dimensional
+     * <code>ArrayList</code>
+     * 
+     * @param c
+     *            String containing the whole constraints, separated by
+     *            delimiter <code>delim</code>
+     * @param delim
+     *            the delimiter in String format
+     * @throws NullPointerException
+     *             is thrown when there is an undeclared variable
+     */
+    private void parseConstraints(String c, String delim)
+	    throws NullPointerException {
+	c = c.replaceAll("\\s", "");
+
+	StringTokenizer st = new StringTokenizer(c, delim);
+
+	while (st.hasMoreTokens()) {
+	    String s = st.nextToken();
+	    Double[] d = new Double[varCount + 1];
+	    Arrays.fill(d, 0.0);
+
+	    Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
+	    Matcher mWholeEq = pWholeEq.matcher(s);
+
+	    while (mWholeEq.find()) {
+		/*
+		 * for each pair of coefficient and variable, we extract the
+		 * coefficient as a double and variable as a string using the
+		 * simple inner class <code>SimpleExpression</code>
+		 */
+		SimpleExpression se = new SimpleExpression(mWholeEq.group(),
+			"objective function");
+
+		d[varMapper.get(se.varName)] = se.coefficient;
+	    }
+
+	    pWholeEq = Pattern.compile("[><]?=[0-9]+");
+	    mWholeEq = pWholeEq.matcher(s);
+	    mWholeEq.find();
+	    String t = mWholeEq.group();
+	    pWholeEq = Pattern.compile("[0-9]+");
+	    mWholeEq = pWholeEq.matcher(t);
+	    mWholeEq.find();
+	    String t2 = mWholeEq.group();
+	    d[varCount] = Double.parseDouble(t2);
+	    if (!t.contains(">")) {
+		cMatrix.add(new ArrayList<Double>(Arrays.asList(d)));
+	    }
+	    if (!t.contains("<")) {
+		for (int i = 0; i < varCount + 1; i++) {
+		    d[i] = -d[i];
+		}
+		cMatrix.add(new ArrayList<Double>(Arrays.asList(d)));
+	    }
+	}
+    }
+
+    /**
+     * Correspond to a pair of coefficient and variable. e.g: 5x, -10y, 101var5
+     * 
+     * @author Radityo
+     * 
+     */
+    private class SimpleExpression {
+	double coefficient;
+	String varName;
+
+	/**
+	 * This constructor assign the coefficient and variable name extracted
+	 * from a given expression in string format.
+	 * 
+	 * 
+	 * @param exp
+	 *            expression in string format
+	 * @param parentExp
+	 *            where the expression is contained (objective function or
+	 *            constraint). This is used for exception reporting.
+	 */
+	SimpleExpression(String exp, String parentExp)
+		throws NullPointerException {
+
 	    Pattern pEachVar = Pattern.compile("[a-zA-Z]+[0-9]*");
-	    Matcher mEachVar = pEachVar.matcher(sEachVar);
+	    Matcher mEachVar = pEachVar.matcher(exp);
 
 	    mEachVar.find();
 	    String varName = mEachVar.group();
 	    if (varMapper.get(varName) == null) {
-		throw new NullPointerException(
-			"You have undeclared variables in your objective function.");
+		throw new NullPointerException("Variable " + varName + " in "
+			+ parentExp + "is undeclared");
 	    }
+	    this.varName = varName;
 
 	    pEachVar = Pattern.compile("-?[0-9]*");
-	    mEachVar = pEachVar.matcher(sEachVar);
+	    mEachVar = pEachVar.matcher(exp);
 	    mEachVar.find();
 	    String coefficient = mEachVar.group();
 
 	    if (coefficient.equals(""))
-		d[varMapper.get(varName)] = 1.0;
+		this.coefficient = 1.0;
 	    else if (coefficient.equals("-"))
-		d[varMapper.get(varName)] = -1.0;
+		this.coefficient = -1.0;
 	    else
-		d[varMapper.get(varName)] = Double.parseDouble(coefficient);
-
-	    objectiveF = new ArrayList<Double>(Arrays.asList(d));
+		this.coefficient = Double.parseDouble(coefficient);
 	}
-
     }
+
 }
