@@ -1,6 +1,7 @@
 package it.unibz.inf.aa.ajrep.test;
 
 import it.unibz.inf.aa.ajrep.parser.Parser;
+import it.unibz.inf.aa.ajrep.ui.UI;
 
 public class Test {
 
@@ -13,6 +14,9 @@ public class Test {
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
+        
+        UI gui = new UI();
+        gui.setVisible(true);
 	
     }
 
