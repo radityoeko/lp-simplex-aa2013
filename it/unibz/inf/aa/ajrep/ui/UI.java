@@ -8,11 +8,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
+/**
+ * This class is main user interface window for data inputing.
+ * 
+ * @author Andrius
+ */
 public class UI extends JFrame {
     public JButton execute;
     public JTextPane variablesTextArea, functionTextArea, constraintsTextArea;
     public JComboBox choice;
     
+    /**
+     * Creates main window of user interface.
+     */
     public UI() {
         this.setSize(340, 370);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
