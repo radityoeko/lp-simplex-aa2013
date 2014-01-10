@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 public class UI extends JFrame {
-    public JButton submit;
+    public JButton execute;
     public JTextPane variablesTextArea, functionTextArea, constraintsTextArea;
     public JComboBox choice;
     
@@ -80,10 +80,10 @@ public class UI extends JFrame {
         choice.setBounds(10, 10, 80, 20);
         submitPanel.add(choice);
         
-        //submit button
-        submit = new JButton("Submit");
-        submit.setBounds(100, 10, 100, 20);
-        submitPanel.add(submit);
+        //execute button
+        execute = new JButton("Execute");
+        execute.setBounds(100, 10, 100, 20);
+        submitPanel.add(execute);
         
         mainPanel.add(fieldsPanel);
         mainPanel.add(submitPanel);
