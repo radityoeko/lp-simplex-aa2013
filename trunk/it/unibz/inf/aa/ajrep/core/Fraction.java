@@ -1,5 +1,7 @@
 package it.unibz.inf.aa.ajrep.core;
 
+import static java.lang.Math.abs;
+
 /**
  * This class describes Fraction. Fractions are used in equation calculation.
  * 
@@ -9,6 +11,23 @@ public class Fraction {
     private int num, den;
     
     public Fraction () {
+    }
+    
+    public Fraction (double d) {
+        boolean sign = d < 0 ? true : false;
+        d = abs(d);
+        String s = String.valueOf(d);
+        int digitsDec = s.length() - 1 - s.indexOf('.');        
+
+        int denominator = 1;
+        for(int i = 0; i < digitsDec; i++){
+           d *= 10;
+           denominator *= 10;
+        }
+        int numerator = (int) Math.round(d);
+        
+        this.num = sign ? (-1) * numerator : numerator;
+        this.den = denominator;
     }
     
     /**
