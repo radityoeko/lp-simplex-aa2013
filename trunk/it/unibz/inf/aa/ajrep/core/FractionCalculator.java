@@ -17,6 +17,12 @@ public class FractionCalculator {
      * @return 
      */
     public Fraction add(Fraction f1, Fraction f2) {
+        if (f1.isZero()) {
+            return f2;
+        } else if (f2.isZero()) {
+            return f1;
+        }
+        
         Fraction f = new Fraction();
         f.setNumerator(f1.getNumerator() * f2.getDenomintor() + f2.getNumerator() * f1.getDenomintor());
         f.setDenominator(f1.getDenomintor() * f2.getDenomintor());
@@ -33,6 +39,13 @@ public class FractionCalculator {
      * @return Fraction
      */
     public Fraction sub(Fraction f1, Fraction f2) {
+        if (f1.isZero()) {
+            f2.changeSign();
+            return f2;
+        } else if (f2.isZero()) {
+            return f1;
+        }
+        
         Fraction f = new Fraction();
         f.setNumerator(f1.getNumerator() * f2.getDenomintor() - f2.getNumerator() * f1.getDenomintor());
         f.setDenominator(f1.getDenomintor() * f2.getDenomintor());

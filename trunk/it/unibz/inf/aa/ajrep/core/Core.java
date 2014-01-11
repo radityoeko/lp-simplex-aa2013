@@ -10,11 +10,18 @@ public class Core {
         parser = new Parser();
     }
     
+    /**
+     * Functions finds first constraint, which has positive selected variable.
+     * 
+     * @param varIndex
+     * @param constraintIndex
+     * @return index of constraint (if -1, then first positive not exists)
+     */
     public int searchFirstPositive(int varIndex, int constraintIndex) {
         for (int i = constraintIndex - 1; i >= 0; i--) {
             ArrayList<Fraction> constraint = parser.cMatrix.get(i);
             Fraction variable = constraint.get(varIndex);
-            if ((variable.getNumerator() > 0 || variable.getDenomintor() > 0)) {
+            if (!variable.isNegative() && !variable.isZero()) {
                 return i;
             }
         }
