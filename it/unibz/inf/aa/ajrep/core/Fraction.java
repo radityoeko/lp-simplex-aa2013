@@ -89,8 +89,7 @@ public class Fraction {
      * 
      */
     public void simplify() {
-        boolean sign = false;
-        if ((num < 0) ^ (den < 0)) {sign = true;}
+        boolean sign = this.isNegative() ? true : false; 
         num = abs(num);
         den = abs(den);
         
@@ -108,5 +107,43 @@ public class Fraction {
         if (num == den && num != 0 && den != 0) {num = 1; den = 1;}
         
         num = sign ? (-1)*num : num;
+    }
+    
+    /**
+     * 
+     * @return true if negative, false if not negative
+     */
+    public boolean isNegative() {
+        if (num < 0 ^ den < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * 
+     * @return true if fraction is zero, false if fraction not zero
+     */
+    public boolean isZero() {
+        if (num == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Changes fraction sign.
+     */
+    public void changeSign() {
+        num = num * -1;
+    }
+    
+    /**
+     * @return Fraction like string
+     */
+    public String toString() {
+        return num + "/" + den;
     }
 }
