@@ -129,7 +129,8 @@ public class Parser {
 	 */
 	public void parseObjectiveFunction(String f) throws NullPointerException {
 		Fraction[] d = new Fraction[varCount];
-		Arrays.fill(d, 0.0);
+		Arrays.fill(d, new Fraction(0,1));
+		
 
 		f = f.replaceAll("\\s", ""); // remove all whitespaces first
 
@@ -184,7 +185,7 @@ public class Parser {
 		while (st.hasMoreTokens()) {
 			String s = st.nextToken();
 			Fraction[] d = new Fraction[varCount + 1];
-			Arrays.fill(d, 0.0);
+			Arrays.fill(d, new Fraction(0,1));
 
 			Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
 			Matcher mWholeEq = pWholeEq.matcher(s);
