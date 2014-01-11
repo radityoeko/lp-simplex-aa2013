@@ -13,7 +13,12 @@ public class Fraction {
     public Fraction () {
     }
     
-    public Fraction (double d) {
+    /**
+     * Creates Fraction from double variable.
+     * 
+     * @param d 
+     */
+    public Fraction(double d) {
         boolean sign = d < 0 ? true : false;
         d = abs(d);
         String s = String.valueOf(d);
@@ -28,6 +33,8 @@ public class Fraction {
         
         this.num = sign ? (-1) * numerator : numerator;
         this.den = denominator;
+        
+        this.simplify();
     }
     
     /**
@@ -36,9 +43,11 @@ public class Fraction {
      * @param num
      * @param den 
      */
-    public Fraction (int num, int den) {
+    public Fraction(int num, int den) {
         this.num = num;
         this.den = den;
+        
+        this.simplify();
     }
     
     /**
@@ -73,5 +82,31 @@ public class Fraction {
      */
     public void setDenominator(int den) {
         this.den = den;
+    }
+    
+    /**
+     * Simplifies Fraction.
+     * 
+     */
+    public void simplify() {
+        boolean sign = false;
+        if ((num < 0) ^ (den < 0)) {sign = true;}
+        num = abs(num);
+        den = abs(den);
+        
+        int n = num < den ? num : den;
+
+        for (int i = n; i > 0; i--) {
+            if (num % i == 0 && den % i == 0) {
+                num = num / i;
+                den = den /i;
+                break;
+            }
+        }
+        
+        if (num == 0) {den = 0;}
+        if (num == den && num != 0 && den != 0) {num = 1; den = 1;}
+        
+        num = sign ? (-1)*num : num;
     }
 }
