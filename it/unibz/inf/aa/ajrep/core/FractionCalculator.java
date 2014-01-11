@@ -97,7 +97,7 @@ public class FractionCalculator {
         }
         
         if (num == 0) {den = 0;}
-        if (num == den) {num = 1; den = 1;}
+        if (num == den && num != 0 && den != 0) {num = 1; den = 1;}
         
         return sign ? new Fraction((-1)*num, den) : new Fraction(num, den);
     }
