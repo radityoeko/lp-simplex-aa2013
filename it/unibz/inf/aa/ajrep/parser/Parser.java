@@ -224,7 +224,7 @@ public class Parser {
 	}
 
 	/**
-	 * Correspond to a pair of coefficient and variable. e.g: 5x, -10y or 101var5
+	 * Correspond to a pair of coefficient and variable. e.g: 5x, -10y, 101var5
 	 * 
 	 * @author Radityo
 	 * 
@@ -268,7 +268,7 @@ public class Parser {
 			else if (coefficient.equals("-"))
 				this.coefficient = new Fraction(-1,1);
 			else
-				this.coefficient = new Fraction(Double.parseDouble(t2));
+				this.coefficient = new Fraction(Double.parseDouble(coefficient));
 		}
 	}
 
