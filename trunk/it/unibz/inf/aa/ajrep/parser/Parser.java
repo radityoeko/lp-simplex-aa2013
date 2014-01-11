@@ -29,21 +29,21 @@ public class Parser {
 	/**
 	 * Map variable name to its index.
 	 */
-	HashMap<String, Integer> varMapper = new HashMap<String, Integer>();
+	public HashMap<String, Integer> varMapper = new HashMap<String, Integer>();
 
 	/**
 	 * Used to obtain variable name, given its index.
 	 */
-	ArrayList<String> varNameList = new ArrayList<String>();
+	public ArrayList<String> varNameList = new ArrayList<String>();
 
 	/**
 	 * Used to obtain variable value, given its index.
 	 */
-	ArrayList<Fraction> varValueList = new ArrayList<Fraction>();
+	public ArrayList<Fraction> varValueList = new ArrayList<Fraction>();
 
-	ArrayList<Fraction> objectiveF;
+	public ArrayList<Fraction> objectiveF;
 
-	ArrayList<ArrayList<Fraction>> cMatrix = new ArrayList<ArrayList<Fraction>>();
+	public ArrayList<ArrayList<Fraction>> cMatrix = new ArrayList<ArrayList<Fraction>>();
 
 	boolean maximize;
 

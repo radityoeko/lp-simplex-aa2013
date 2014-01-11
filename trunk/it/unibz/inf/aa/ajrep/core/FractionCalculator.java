@@ -1,7 +1,5 @@
 package it.unibz.inf.aa.ajrep.core;
 
-import static java.lang.Math.abs;
-
 /**
  * This class is for make calculations with fractions.
  * 
@@ -23,7 +21,8 @@ public class FractionCalculator {
         f.setNumerator(f1.getNumerator() * f2.getDenomintor() + f2.getNumerator() * f1.getDenomintor());
         f.setDenominator(f1.getDenomintor() * f2.getDenomintor());
         
-        return this.simplify(f);
+        f.simplify();
+        return f;
     }
     
     /**
@@ -38,7 +37,8 @@ public class FractionCalculator {
         f.setNumerator(f1.getNumerator() * f2.getDenomintor() - f2.getNumerator() * f1.getDenomintor());
         f.setDenominator(f1.getDenomintor() * f2.getDenomintor());
         
-        return this.simplify(f);
+        f.simplify();
+        return f;
     }
     
     /**
@@ -53,7 +53,8 @@ public class FractionCalculator {
         f.setNumerator(f1.getNumerator() * f2.getNumerator());
         f.setDenominator(f1.getDenomintor() * f2.getDenomintor());
         
-        return this.simplify(f);
+        f.simplify();
+        return f;
     }
     
     /**
@@ -68,37 +69,7 @@ public class FractionCalculator {
         f.setNumerator(f1.getNumerator() * f2.getDenomintor());
         f.setDenominator(f1.getDenomintor() * f2.getNumerator());
         
-        return this.simplify(f);
-    }
-    
-    /**
-     * Simplify inputed Fraction.
-     * 
-     * @param f
-     * @return Fraction
-     */
-    private Fraction simplify(Fraction f) {
-        int num = f.getNumerator();
-        int den = f.getDenomintor();
-        
-        boolean sign = false;
-        if ((num < 0) ^ (den < 0)) {sign = true;}
-        num = abs(num);
-        den = abs(den);
-        
-        int n = num < den ? num : den;
-
-        for (int i = n; i > 0; i--) {
-            if (num % i == 0 && den % i == 0) {
-                num = num / i;
-                den = den /i;
-                break;
-            }
-        }
-        
-        if (num == 0) {den = 0;}
-        if (num == den && num != 0 && den != 0) {num = 1; den = 1;}
-        
-        return sign ? new Fraction((-1)*num, den) : new Fraction(num, den);
+        f.simplify();
+        return f;
     }
 }
