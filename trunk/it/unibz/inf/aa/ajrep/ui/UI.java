@@ -1,5 +1,7 @@
 package it.unibz.inf.aa.ajrep.ui;
 
+import it.unibz.inf.aa.ajrep.core.Fraction;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -96,5 +98,11 @@ public class UI extends JFrame {
         mainPanel.add(fieldsPanel);
         mainPanel.add(submitPanel);
         this.add(mainPanel);
+    }
+    
+    public Output showOutput(int varCount, ArrayList<Fraction> objectiveF, ArrayList<ArrayList<Fraction>> cMatrix) {
+        this.setVisible(false);
+        
+        return new Output(varCount, objectiveF, cMatrix);
     }
 }
