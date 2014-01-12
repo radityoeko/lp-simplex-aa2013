@@ -123,6 +123,18 @@ public class Fraction {
     
     /**
      * 
+     * @return true if positive, false if not positive
+     */
+    public boolean isPositive() {
+        if (num > 0 && den > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * 
      * @return true if fraction is zero, false if fraction not zero
      */
     public boolean isZero() {
@@ -144,6 +156,12 @@ public class Fraction {
      * @return Fraction like string
      */
     public String toString() {
-        return num + "/" + den;
+        if (den == 1) {
+            return "" + num;
+        } else if (num == 0) {
+            return "0";
+        } else {
+            return num + "/" + den;
+        }
     }
 }

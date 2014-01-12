@@ -45,9 +45,9 @@ public class Parser {
 
 	public ArrayList<ArrayList<Fraction>> cMatrix = new ArrayList<ArrayList<Fraction>>();
 
-	boolean maximize;
+	public boolean maximize;
 
-	int varCount;
+	public int varCount;
 
 	/**
 	 * Parse variable from an input string. The variables are separated by
