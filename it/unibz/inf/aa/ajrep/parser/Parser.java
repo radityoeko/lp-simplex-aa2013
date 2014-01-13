@@ -49,6 +49,8 @@ public class Parser {
 	public ArrayList<ArrayList<Fraction>> positiveTrivial = new ArrayList<ArrayList<Fraction>>();
 	
 	public ArrayList<Integer> indexOfPositiveTrivial = new ArrayList<Integer>();
+	
+	public ArrayList<ArrayList<Fraction>> allConstraintMatrix  = new ArrayList<ArrayList<Fraction>>();
 
 	public boolean maximize;
 
@@ -84,8 +86,9 @@ public class Parser {
 	 */
 	private void parseVariable(String input, String delimiter)
 			throws IllegalVariableNameException {
+		input = input.replaceAll("\\s", ""); // remove all whitespaces first
 		StringTokenizer st = new StringTokenizer(input, delimiter);
-
+		
 		int varCounter = 0; // counter represents index
 		while (st.hasMoreTokens()) {
 			String s = st.nextToken();
@@ -115,8 +118,7 @@ public class Parser {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Variables: " + varNameList.toString() + "\n");
 		sb.append("Objective function: " + objectiveF.toString() + "\n");
-		sb.append("Constraints: " + cMatrix.toString() + "\n");
-		sb.append("PositiveTrivial: " + positiveTrivial.toString());
+		sb.append("All Constraints: " + allConstraintMatrix.toString());
 		return sb.toString();
 	}
 
@@ -243,7 +245,9 @@ public class Parser {
 			}
 		}
 		
-//		cMatrix.addAll(negativeTrivial);
+		allConstraintMatrix.addAll(cMatrix);
+		allConstraintMatrix.addAll(negativeTrivial);
+		allConstraintMatrix.addAll(positiveTrivial);
 		
 	}
 
