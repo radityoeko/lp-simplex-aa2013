@@ -9,6 +9,9 @@ import static java.lang.Math.abs;
  */
 public class Fraction {
     private int num, den;
+    public static final Fraction ONE = new Fraction(1,1);
+    public static final Fraction ZERO = new Fraction(0,1);
+    public static final Fraction MIN = new Fraction(-1,1);
     
     public Fraction () {
     }
@@ -123,18 +126,6 @@ public class Fraction {
     
     /**
      * 
-     * @return true if positive, false if not positive
-     */
-    public boolean isPositive() {
-        if (num > 0 && den > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * 
      * @return true if fraction is zero, false if fraction not zero
      */
     public boolean isZero() {
@@ -143,6 +134,14 @@ public class Fraction {
         } else {
             return false;
         }
+    }
+    
+    /**
+     * 
+     * @return true if negative, false if not negative
+     */
+    public boolean isPositive() {
+        return !this.isNegative() && !this.isZero();
     }
     
     /**
@@ -156,12 +155,84 @@ public class Fraction {
      * @return Fraction like string
      */
     public String toString() {
-        if (den == 1) {
-            return "" + num;
-        } else if (num == 0) {
-            return "0";
-        } else {
-            return num + "/" + den;
-        }
+        return num + "/" + den;
     }
+    
+    /**
+     * Adds Fraction this & Fraction f2.
+     * 
+     * @param this
+     * @param f2
+     * @return 
+     */
+    public Fraction add( Fraction f2) {
+        if (this.isZero()) {
+            return f2;
+        } else if (f2.isZero()) {
+            return this;
+        }
+        
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getDenomintor() + f2.getNumerator() * this.getDenomintor());
+        f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+        
+        f.simplify();
+        return f;
+    }
+    
+    /**
+     * From Fraction this subtracts Fraction f2.
+     * 
+     * @param this
+     * @param f2
+     * @return Fraction
+     */
+    public Fraction sub( Fraction f2) {
+        if (this.isZero()) {
+            f2.changeSign();
+            return f2;
+        } else if (f2.isZero()) {
+            return this;
+        }
+        
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getDenomintor() - f2.getNumerator() * this.getDenomintor());
+        f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+        
+        f.simplify();
+        return f;
+    }
+    
+    /**
+     * Multiplies Fraction this & Fraction f2.
+     * 
+     * @param this
+     * @param f2
+     * @return Fraction
+     */
+    public Fraction mul( Fraction f2) {
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getNumerator());
+        f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+        
+        f.simplify();
+        return f;
+    }
+    
+    /**
+     * Divides Fraction this from Fraction f2
+     * 
+     * @param this
+     * @param f2
+     * @return Fraction
+     */
+    public Fraction div( Fraction f2) {
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getDenomintor());
+        f.setDenominator(this.getDenomintor() * f2.getNumerator());
+        
+        f.simplify();
+        return f;
+    }
+
 }
