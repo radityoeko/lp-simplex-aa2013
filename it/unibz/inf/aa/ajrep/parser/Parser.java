@@ -139,7 +139,7 @@ public class Parser {
 		
 		f = f.replaceAll("\\s", ""); // remove all whitespaces first
 
-		Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
+		Pattern pWholeEq = Pattern.compile("-?([0-9]+(\\.[0-9]+)?)*[a-zA-Z]+[0-9]*");
 		Matcher mWholeEq = pWholeEq.matcher(f);
 
 		while (mWholeEq.find()) {
@@ -192,7 +192,7 @@ public class Parser {
 			Fraction[] d = new Fraction[varCount + 1];
 			Arrays.fill(d, new Fraction(0,1));
 
-			Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
+			Pattern pWholeEq = Pattern.compile("-?([0-9]+(\\.[0-9]+)?)*[a-zA-Z]+[0-9]*");
 			Matcher mWholeEq = pWholeEq.matcher(s);
 
 			ArrayList<Integer> varAppearing = new ArrayList<Integer>();
@@ -209,11 +209,11 @@ public class Parser {
 				varAppearing.add(varMapper.get(se.varName));
 			}
 
-			pWholeEq = Pattern.compile("[><]?=-?[0-9]+");
+			pWholeEq = Pattern.compile("[><]?=-?([0-9]+(\\.[0-9]+)?)+");
 			mWholeEq = pWholeEq.matcher(s);
 			mWholeEq.find();
 			String t = mWholeEq.group();
-			pWholeEq = Pattern.compile("-?[0-9]+");
+			pWholeEq = Pattern.compile("-?([0-9]+(\\.[0-9]+)?)+");
 			mWholeEq = pWholeEq.matcher(t);
 			mWholeEq.find();
 			String t2 = mWholeEq.group();
@@ -243,7 +243,7 @@ public class Parser {
 			}
 		}
 		
-		cMatrix.addAll(negativeTrivial);
+//		cMatrix.addAll(negativeTrivial);
 		
 	}
 
@@ -282,7 +282,7 @@ public class Parser {
 			}
 			this.varName = varName;
 
-			pEachVar = Pattern.compile("-?[0-9]*");
+			pEachVar = Pattern.compile("-?([0-9]+(\\.[0-9]+)?)*");
 			mEachVar = pEachVar.matcher(exp);
 			mEachVar.find();
 			String coefficient = mEachVar.group();
