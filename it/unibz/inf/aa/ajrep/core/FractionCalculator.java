@@ -40,8 +40,7 @@ public class FractionCalculator {
      */
     public Fraction sub(Fraction f1, Fraction f2) {
         if (f1.isZero()) {
-            f2.changeSign();
-            return f2;
+            return this.mul(Fraction.MIN, f2);
         } else if (f2.isZero()) {
             return f1;
         }
@@ -84,5 +83,19 @@ public class FractionCalculator {
         
         f.simplify();
         return f;
+    }
+    
+    public int compare(Fraction f1, Fraction f2) {
+        int den = f1.getDenomintor() * f2.getDenomintor();
+        int num1 = f1.getNumerator() * f2.getDenomintor();
+        int num2 = f2.getNumerator() * f1.getDenomintor();
+        
+        if (num1 > num2) {
+            return 1;
+        } else if (num1 < num2) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
