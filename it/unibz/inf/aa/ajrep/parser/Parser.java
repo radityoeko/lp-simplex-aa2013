@@ -115,7 +115,8 @@ public class Parser {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Variables: " + varNameList.toString() + "\n");
 		sb.append("Objective function: " + objectiveF.toString() + "\n");
-		sb.append("Constraints: " + cMatrix.toString());
+		sb.append("Constraints: " + cMatrix.toString() + "\n");
+		sb.append("PositiveTrivial: " + positiveTrivial.toString());
 		return sb.toString();
 	}
 
@@ -133,10 +134,9 @@ public class Parser {
 	 *             when there is undeclared variable in the formula
 	 */
 	public void parseObjectiveFunction(String f) throws NullPointerException {
-		Fraction[] d = new Fraction[varCount];
+		Fraction[] d = new Fraction[varCount+1];
 		Arrays.fill(d, new Fraction(0,1));
 		
-
 		f = f.replaceAll("\\s", ""); // remove all whitespaces first
 
 		Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
@@ -219,21 +219,25 @@ public class Parser {
 			String t2 = mWholeEq.group();
 			d[varCount] = new Fraction(Double.parseDouble(t2));
 			if (!t.contains(">")) {
+//				System.out.println(" <= " + (new ArrayList<Fraction>(Arrays.asList(d))).toString());
 				cMatrix.add(new ArrayList<Fraction>(Arrays.asList(d)));
 				
 			}
 			if (!t.contains("<")) {
 				for (int i = 0; i < varCount + 1; i++) {
-					d[i].changeSign();
+					d[i] = d[i].mul(Fraction.MIN);
 				}
-				if(varAppearing.size() > 1)
+				if(varAppearing.size() > 1) {
+//					System.out.println(" >= " + (new ArrayList<Fraction>(Arrays.asList(d))).toString());
 					cMatrix.add(new ArrayList<Fraction>(Arrays.asList(d)));
+				}
 				else {
 					if(objectiveF.get(varAppearing.get(0)).isPositive()) {
 						positiveTrivial.add(new ArrayList<Fraction>(Arrays.asList(d)));
 						indexOfPositiveTrivial.add(varAppearing.get(0));
 					}
 					else
+//						System.out.println(" >= " + (new ArrayList<Fraction>(Arrays.asList(d))).toString());
 						negativeTrivial.add(new ArrayList<Fraction>(Arrays.asList(d)));
 				}
 			}
@@ -274,7 +278,7 @@ public class Parser {
 			String varName = mEachVar.group();
 			if (varMapper.get(varName) == null) {
 				throw new NullPointerException("Variable " + varName + " in "
-						+ parentExp + "is undeclared");
+						+ parentExp + " is undeclared");
 			}
 			this.varName = varName;
 
