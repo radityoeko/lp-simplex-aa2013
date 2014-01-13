@@ -1,7 +1,6 @@
 package it.unibz.inf.aa.ajrep.parser;
 
 import it.unibz.inf.aa.ajrep.core.Fraction;
-import it.unibz.inf.aa.ajrep.core.FractionCalculator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +43,12 @@ public class Parser {
 	public ArrayList<Fraction> objectiveF;
 
 	public ArrayList<ArrayList<Fraction>> cMatrix = new ArrayList<ArrayList<Fraction>>();
+	
+	public ArrayList<ArrayList<Fraction>> negativeTrivial = new ArrayList<ArrayList<Fraction>>();
+	
+	public ArrayList<ArrayList<Fraction>> positiveTrivial = new ArrayList<ArrayList<Fraction>>();
+	
+	public ArrayList<Integer> indexOfPositiveTrivial = new ArrayList<Integer>();
 
 	public boolean maximize;
 
@@ -190,6 +195,7 @@ public class Parser {
 			Pattern pWholeEq = Pattern.compile("-?[0-9]*[a-zA-Z]+[0-9]*");
 			Matcher mWholeEq = pWholeEq.matcher(s);
 
+			ArrayList<Integer> varAppearing = new ArrayList<Integer>();
 			while (mWholeEq.find()) {
 				/*
 				 * for each pair of coefficient and variable, we extract the
@@ -200,28 +206,41 @@ public class Parser {
 						"objective function");
 
 				d[varMapper.get(se.varName)] = se.coefficient;
+				varAppearing.add(varMapper.get(se.varName));
 			}
 
-			pWholeEq = Pattern.compile("[><]?=[0-9]+");
+			pWholeEq = Pattern.compile("[><]?=-?[0-9]+");
 			mWholeEq = pWholeEq.matcher(s);
 			mWholeEq.find();
 			String t = mWholeEq.group();
-			pWholeEq = Pattern.compile("[0-9]+");
+			pWholeEq = Pattern.compile("-?[0-9]+");
 			mWholeEq = pWholeEq.matcher(t);
 			mWholeEq.find();
 			String t2 = mWholeEq.group();
 			d[varCount] = new Fraction(Double.parseDouble(t2));
 			if (!t.contains(">")) {
 				cMatrix.add(new ArrayList<Fraction>(Arrays.asList(d)));
+				
 			}
 			if (!t.contains("<")) {
 				for (int i = 0; i < varCount + 1; i++) {
-					d[i] = (new FractionCalculator()).sub(new Fraction(0, 1),
-							d[1]);
+					d[i].changeSign();
 				}
-				cMatrix.add(new ArrayList<Fraction>(Arrays.asList(d)));
+				if(varAppearing.size() > 1)
+					cMatrix.add(new ArrayList<Fraction>(Arrays.asList(d)));
+				else {
+					if(objectiveF.get(varAppearing.get(0)).isPositive()) {
+						positiveTrivial.add(new ArrayList<Fraction>(Arrays.asList(d)));
+						indexOfPositiveTrivial.add(varAppearing.get(0));
+					}
+					else
+						negativeTrivial.add(new ArrayList<Fraction>(Arrays.asList(d)));
+				}
 			}
 		}
+		
+		cMatrix.addAll(negativeTrivial);
+		
 	}
 
 	/**
