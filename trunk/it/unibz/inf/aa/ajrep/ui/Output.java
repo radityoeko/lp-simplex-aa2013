@@ -4,10 +4,16 @@ import it.unibz.inf.aa.ajrep.core.Fraction;
 import it.unibz.inf.aa.ajrep.core.FractionCalculator;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -17,9 +23,12 @@ import javax.swing.border.EtchedBorder;
  * @author Andrius
  */
 public class Output extends JFrame {
-    private FractionCalculator calculator;
+    private final FractionCalculator calculator;
+    public ArrayList<Point> points;
     
     public Output(int varCount, ArrayList<Fraction> objectiveF, ArrayList<ArrayList<Fraction>> cMatrix) {
+        this.points = new ArrayList<Point>();
+        
         this.setSize(500, 600);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -80,6 +89,21 @@ public class Output extends JFrame {
             this.varCount = varCount;
             this.objectiveF = objectiveF;
             this.cMatrix = cMatrix;
+            
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    for (Point point : points) {
+                        if (point.contains(e.getX(), e.getY())) {
+                            //repaint();
+                            Fraction x = point.x;
+                            Fraction y = point.y;
+                            JOptionPane.showMessageDialog(null, "x: " + x + "\ny: " + y);
+                            break;
+                        }
+                    }
+                }
+            });
         }
 
         public double round(double value) {
@@ -188,7 +212,13 @@ public class Output extends JFrame {
             return true;
         }
         
-        private void paintPoints(Graphics g, int scale, int zeroX, int zeroY) {
+        private void createPoint(double x, double y, double w, double h, Fraction[] point) {
+            //Ellipse2D p = new Ellipse2D.Double(x,y,w,h);
+            Point p = new Point(x, y, w, h, point);
+            points.add(p);
+        }
+        
+        private void createPoints(Graphics g, int scale, int zeroX, int zeroY) {
             for (int i = 0; i < this.cMatrix.size(); i++){
                 for (int j = 1; j < this.cMatrix.size() && i != j; j++) {
                     Function f1 = new Function(this.cMatrix.get(i).get(0), this.cMatrix.get(i).get(1), this.cMatrix.get(i).get(2));
@@ -201,10 +231,24 @@ public class Output extends JFrame {
                         double Y = round((double)(point[1].getNumerator() * 1.0 / point[1].getDenomintor()));
                         int coordX = (int) (X * scale) + zeroX;
                         int coordY = (int) (Y * -1 * scale) + zeroY;
-                        g.setColor(Color.RED);
-                        g.fillOval(coordX-3, coordY-3, 6, 6);
+                        //g.setColor(Color.RED);
+                        //System.out.println(point[0] + " " + point[1]);
+                        this.createPoint(coordX-3, coordY-3, 6, 6, point);
+                        //g.fillOval(coordX-3, coordY-3, 6, 6);
                     }
                 }
+            }
+        }
+        
+        public void paint(Graphics g) {
+            super.paint(g);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setPaint(Color.red);
+
+            for (Ellipse2D e : points) {
+                //g2.fill(e);
+                g2.draw(e);
             }
         }
 
@@ -256,8 +300,8 @@ public class Output extends JFrame {
                     this.plotFunction(g, f, scale, i, zeroX, zeroY);
                 }
             }
-            
-            this.paintPoints(g, scale, zeroX, zeroY);
+            //System.out.println("...");
+            this.createPoints(g, scale, zeroX, zeroY);
         }
     }
 }
