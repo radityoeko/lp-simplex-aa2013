@@ -2,16 +2,12 @@ package it.unibz.inf.aa.ajrep.test;
 
 import it.unibz.inf.aa.ajrep.core.Core;
 import it.unibz.inf.aa.ajrep.core.Fraction;
-import it.unibz.inf.aa.ajrep.core.FractionCalculator;
-import it.unibz.inf.aa.ajrep.parser.IllegalVariableNameException;
 import it.unibz.inf.aa.ajrep.parser.Parser;
 import it.unibz.inf.aa.ajrep.ui.Output;
 import it.unibz.inf.aa.ajrep.ui.UI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Test {
