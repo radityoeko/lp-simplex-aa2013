@@ -4,257 +4,267 @@ import static java.lang.Math.abs;
 
 /**
  * This class describes Fraction. Fractions are used in equation calculation.
- * 
+ *
  * @author Andrius
  */
 public class Fraction {
-	private int num, den;
-	public static final Fraction ONE = new Fraction(1, 1);
-	public static final Fraction ZERO = new Fraction(0, 1);
-	public static final Fraction MIN = new Fraction(-1, 1);
 
-	public Fraction() {
-	}
+    private int num, den;
+    public static final Fraction ONE = new Fraction(1, 1);
+    public static final Fraction ZERO = new Fraction(0, 1);
+    public static final Fraction MIN = new Fraction(-1, 1);
 
-	/**
-	 * Creates Fraction from double variable.
-	 * 
-	 * @param d
-	 */
-	public Fraction(double d) {
-		boolean sign = d < 0 ? true : false;
-		d = abs(d);
-		String s = String.valueOf(d);
-		int digitsDec = s.length() - 1 - s.indexOf('.');
+    public Fraction() {
+    }
 
-		int denominator = 1;
-		for (int i = 0; i < digitsDec; i++) {
-			d *= 10;
-			denominator *= 10;
-		}
-		int numerator = (int) Math.round(d);
+    /**
+     * Creates Fraction from double variable.
+     *
+     * @param d
+     */
+    public Fraction(double d) {
+        boolean sign = d < 0 ? true : false;
+        d = abs(d);
+        String s = String.valueOf(d);
+        int digitsDec = s.length() - 1 - s.indexOf('.');
 
-		this.num = sign ? (-1) * numerator : numerator;
-		this.den = denominator;
+        int denominator = 1;
+        for (int i = 0; i < digitsDec; i++) {
+            d *= 10;
+            denominator *= 10;
+        }
+        int numerator = (int) Math.round(d);
 
-		this.simplify();
-	}
+        this.num = sign ? (-1) * numerator : numerator;
+        this.den = denominator;
 
-	/**
-	 * Sets numerator & denominator of fraction.
-	 * 
-	 * @param num
-	 * @param den
-	 */
-	public Fraction(int num, int den) {
-		this.num = num;
-		this.den = den;
+        this.simplify();
+    }
 
-		this.simplify();
-	}
+    /**
+     * Sets numerator & denominator of fraction.
+     *
+     * @param num
+     * @param den
+     */
+    public Fraction(int num, int den) {
+        this.num = num;
+        this.den = den;
 
-	/**
-	 * 
-	 * @return numerator of fraction
-	 */
-	public int getNumerator() {
-		return num;
-	}
+        this.simplify();
+    }
 
-	/**
-	 * 
-	 * @return denominator of fraction
-	 */
-	public int getDenomintor() {
-		return den;
-	}
+    /**
+     *
+     * @return numerator of fraction
+     */
+    public int getNumerator() {
+        return num;
+    }
 
-	/**
-	 * Sets numerator of fraction.
-	 * 
-	 * @param num
-	 */
-	public void setNumerator(int num) {
-		this.num = num;
-	}
+    /**
+     *
+     * @return denominator of fraction
+     */
+    public int getDenomintor() {
+        return den;
+    }
 
-	/**
-	 * Sets denominator of fraction.
-	 * 
-	 * @param den
-	 */
-	public void setDenominator(int den) {
-		this.den = den;
-	}
+    /**
+     * Sets numerator of fraction.
+     *
+     * @param num
+     */
+    public void setNumerator(int num) {
+        this.num = num;
+    }
 
-	/**
-	 * Simplifies Fraction.
-	 * 
-	 */
-	public void simplify() {
-		if(num == 0) den = 1; 
-		else {
-			boolean sign = this.isNegative() ? true : false;
-			num = abs(num);
-			den = abs(den);
-	
-			int n = num < den ? num : den;
-	
-			for (int i = n; i > 0; i--) {
-				if (num % i == 0 && den % i == 0) {
-					num = num / i;
-					den = den / i;
-					break;
-				}
-			}
-	
-			if (num == 0) {
-				den = 0;
-			}
-			if (num == den && num != 0 && den != 0) {
-				num = 1;
-				den = 1;
-			}
-	
-			num = sign ? (-1) * num : num;
-		}
-	}
+    /**
+     * Sets denominator of fraction.
+     *
+     * @param den
+     */
+    public void setDenominator(int den) {
+        this.den = den;
+    }
 
-	/**
-	 * 
-	 * @return true if negative, false if not negative
-	 */
-	public boolean isNegative() {
-		if (num < 0 ^ den < 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * Simplifies Fraction.
+     *
+     */
+    public void simplify() {
+        if (num == 0) {
+            den = 1;
+        } else {
+            boolean sign = this.isNegative() ? true : false;
+            num = abs(num);
+            den = abs(den);
 
-	/**
-	 * 
-	 * @return true if fraction is zero, false if fraction not zero
-	 */
-	public boolean isZero() {
-		if (num == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+            int n = num < den ? num : den;
 
-	/**
-	 * 
-	 * @return true if negative, false if not negative
-	 */
-	public boolean isPositive() {
-		return !this.isNegative() && !this.isZero();
-	}
+            for (int i = n; i > 0; i--) {
+                if (num % i == 0 && den % i == 0) {
+                    num = num / i;
+                    den = den / i;
+                    break;
+                }
+            }
 
-	/**
-	 * Changes fraction sign.
-	 */
-	public void changeSign() {
-		num = num * -1;
-	}
+            if (num == 0) {
+                den = 0;
+            }
+            if (num == den && num != 0 && den != 0) {
+                num = 1;
+                den = 1;
+            }
 
-	/**
-	 * @return Fraction like string
-	 */
-	public String toString() {
-		return num + "/" + den;
-	}
+            num = sign ? (-1) * num : num;
+        }
+    }
 
-	/**
-	 * Adds Fraction this & Fraction f2.
-	 * 
-	 * @param this
-	 * @param f2
-	 * @return
-	 */
-	public Fraction add(Fraction f2) {
-		if (this.isZero()) {
-			return f2;
-		} else if (f2.isZero()) {
-			return this;
-		}
+    /**
+     *
+     * @return true if negative, false if not negative
+     */
+    public boolean isNegative() {
+        if (num < 0 ^ den < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		Fraction f = new Fraction();
-		f.setNumerator(this.getNumerator() * f2.getDenomintor()
-				+ f2.getNumerator() * this.getDenomintor());
-		f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+    /**
+     *
+     * @return true if fraction is zero, false if fraction not zero
+     */
+    public boolean isZero() {
+        if (num == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		f.simplify();
-		return f;
-	}
+    /**
+     *
+     * @return true if negative, false if not negative
+     */
+    public boolean isPositive() {
+        return !this.isNegative() && !this.isZero();
+    }
 
-	/**
-	 * From Fraction this subtracts Fraction f2.
-	 * 
-	 * @param this
-	 * @param f2
-	 * @return Fraction
-	 */
-	public Fraction sub(Fraction f2) {
-		if (this.isZero()) {
-			f2.changeSign();
-			return f2;
-		} else if (f2.isZero()) {
-			return this;
-		}
+    /**
+     * Changes fraction sign.
+     */
+    public void changeSign() {
+        num = num * -1;
+    }
 
-		Fraction f = new Fraction();
-		f.setNumerator(this.getNumerator() * f2.getDenomintor()
-				- f2.getNumerator() * this.getDenomintor());
-		f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+    /**
+     * @return Fraction like string
+     */
+    public String toString() {
+        if (num == 0) {
+            return "0";
+        } else if (num == den) {
+            return "1";
+        } else if (den == 1) {
+            return num + "";
+        } else {
+            return num + "/" + den;
+        }
+    }
 
-		f.simplify();
-		return f;
-	}
+    /**
+     * Adds Fraction this & Fraction f2.
+     *
+     * @param this
+     * @param f2
+     * @return
+     */
+    public Fraction add(Fraction f2) {
+        if (this.isZero()) {
+            return f2;
+        } else if (f2.isZero()) {
+            return this;
+        }
 
-	/**
-	 * Multiplies Fraction this & Fraction f2.
-	 * 
-	 * @param this
-	 * @param f2
-	 * @return Fraction
-	 */
-	public Fraction mul(Fraction f2) {
-		Fraction f = new Fraction();
-		f.setNumerator(this.getNumerator() * f2.getNumerator());
-		f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getDenomintor()
+                + f2.getNumerator() * this.getDenomintor());
+        f.setDenominator(this.getDenomintor() * f2.getDenomintor());
 
-		f.simplify();
-		return f;
-	}
+        f.simplify();
+        return f;
+    }
 
-	/**
-	 * Divides Fraction this from Fraction f2
-	 * 
-	 * @param this
-	 * @param f2
-	 * @return Fraction
-	 */
-	public Fraction div(Fraction f2) {
-		Fraction f = new Fraction();
-		f.setNumerator(this.getNumerator() * f2.getDenomintor());
-		f.setDenominator(this.getDenomintor() * f2.getNumerator());
+    /**
+     * From Fraction this subtracts Fraction f2.
+     *
+     * @param this
+     * @param f2
+     * @return Fraction
+     */
+    public Fraction sub(Fraction f2) {
+        if (this.isZero()) {
+            f2.changeSign();
+            return f2;
+        } else if (f2.isZero()) {
+            return this;
+        }
 
-		f.simplify();
-		return f;
-	}
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getDenomintor()
+                - f2.getNumerator() * this.getDenomintor());
+        f.setDenominator(this.getDenomintor() * f2.getDenomintor());
 
-	public Fraction inverse() {
-		return new Fraction(-this.num, this.den);
-	}
-	
-	public Double toDouble() {
-		return new Double((double)this.num/(double)this.den);
-	}
+        f.simplify();
+        return f;
+    }
 
-	public boolean lt(Fraction max) {
-		return this.toDouble() < max.toDouble();
-	}
+    /**
+     * Multiplies Fraction this & Fraction f2.
+     *
+     * @param this
+     * @param f2
+     * @return Fraction
+     */
+    public Fraction mul(Fraction f2) {
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getNumerator());
+        f.setDenominator(this.getDenomintor() * f2.getDenomintor());
+
+        f.simplify();
+        return f;
+    }
+
+    /**
+     * Divides Fraction this from Fraction f2
+     *
+     * @param this
+     * @param f2
+     * @return Fraction
+     */
+    public Fraction div(Fraction f2) {
+        Fraction f = new Fraction();
+        f.setNumerator(this.getNumerator() * f2.getDenomintor());
+        f.setDenominator(this.getDenomintor() * f2.getNumerator());
+
+        f.simplify();
+        return f;
+    }
+
+    public Fraction inverse() {
+        return new Fraction(-this.num, this.den);
+    }
+
+    public Double toDouble() {
+        return new Double((double) this.num / (double) this.den);
+    }
+
+    public boolean lt(Fraction max) {
+        return this.toDouble() < max.toDouble();
+    }
 
 }

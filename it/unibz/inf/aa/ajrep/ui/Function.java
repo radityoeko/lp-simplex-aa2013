@@ -8,6 +8,7 @@ import it.unibz.inf.aa.ajrep.core.FractionCalculator;
  * @author Andrius
  */
 public class Function {
+
     public Fraction fx, fy, fa;
     private FractionCalculator calculator;
 
@@ -36,6 +37,6 @@ public class Function {
 
     @Override
     public String toString() {
-        return fx+"x + "+fy+"y = "+fa;
+        return fx + "x + " + fy + "y = " + fa;
     }
 }
