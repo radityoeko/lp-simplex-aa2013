@@ -92,29 +92,32 @@ public class Fraction {
 	 * 
 	 */
 	public void simplify() {
-		boolean sign = this.isNegative() ? true : false;
-		num = abs(num);
-		den = abs(den);
-
-		int n = num < den ? num : den;
-
-		for (int i = n; i > 0; i--) {
-			if (num % i == 0 && den % i == 0) {
-				num = num / i;
-				den = den / i;
-				break;
+		if(num == 0) den = 1; 
+		else {
+			boolean sign = this.isNegative() ? true : false;
+			num = abs(num);
+			den = abs(den);
+	
+			int n = num < den ? num : den;
+	
+			for (int i = n; i > 0; i--) {
+				if (num % i == 0 && den % i == 0) {
+					num = num / i;
+					den = den / i;
+					break;
+				}
 			}
+	
+			if (num == 0) {
+				den = 0;
+			}
+			if (num == den && num != 0 && den != 0) {
+				num = 1;
+				den = 1;
+			}
+	
+			num = sign ? (-1) * num : num;
 		}
-
-		if (num == 0) {
-			den = 0;
-		}
-		if (num == den && num != 0 && den != 0) {
-			num = 1;
-			den = 1;
-		}
-
-		num = sign ? (-1) * num : num;
 	}
 
 	/**
