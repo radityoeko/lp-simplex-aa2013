@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class FractionVector {
 	
-	private ArrayList<Fraction> vector = new ArrayList<Fraction>();
+	private ArrayList<Fraction> vector;
 	
 	public ArrayList<Fraction> getVector() {
 		return vector;
@@ -14,12 +14,13 @@ public class FractionVector {
 		this.vector = vector;
 	}
 
+
 	public FractionVector( ArrayList<Fraction> vector) {
 		this.vector = new ArrayList<Fraction>(vector);
 	}
 	
 	public FractionVector() {
-		// TODO Auto-generated constructor stub
+		this.vector = new ArrayList<Fraction>();
 	}
 
 	public int getColumn() {

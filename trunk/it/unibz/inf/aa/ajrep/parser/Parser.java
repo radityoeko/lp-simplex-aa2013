@@ -48,11 +48,17 @@ public class Parser {
 	
 	public ArrayList<ArrayList<Fraction>> positiveTrivial = new ArrayList<ArrayList<Fraction>>();
 	
+	public ArrayList<ArrayList<Fraction>> allTrivial = new ArrayList<ArrayList<Fraction>>();
+	
 	public ArrayList<Integer> indexOfPositiveTrivial = new ArrayList<Integer>();
+	
+	public ArrayList<Integer[]> indexOfNonZeroTrivial = new ArrayList<Integer[]>();
+	
+//	public ArrayList<Fraction> valueOfNonZeroTrivial = new ArrayList<Fraction>();
 	
 	public ArrayList<ArrayList<Fraction>> allConstraintMatrix  = new ArrayList<ArrayList<Fraction>>();
 
-	public boolean maximize;
+	public boolean maximize = false;
 
 	public int varCount;
 
@@ -194,6 +200,7 @@ public class Parser {
 			Fraction[] d = new Fraction[varCount + 1];
 			Arrays.fill(d, new Fraction(0,1));
 
+//			System.out.println((new ArrayList<Fraction>(Arrays.asList(d))).toString());
 			Pattern pWholeEq = Pattern.compile("-?([0-9]+(\\.[0-9]+)?)*[a-zA-Z]+[0-9]*");
 			Matcher mWholeEq = pWholeEq.matcher(s);
 
@@ -234,13 +241,24 @@ public class Parser {
 					cMatrix.add(new ArrayList<Fraction>(Arrays.asList(d)));
 				}
 				else {
+					
 					if(objectiveF.get(varAppearing.get(0)).isPositive()) {
 						positiveTrivial.add(new ArrayList<Fraction>(Arrays.asList(d)));
 						indexOfPositiveTrivial.add(varAppearing.get(0));
+						if(!d[varCount].isZero()) {
+							indexOfNonZeroTrivial.add(new Integer[]{varAppearing.get(0),0,positiveTrivial.size()-1});
+//							valueOfNonZeroTrivial.add(d[varCount].mul(Fraction.MIN));
+						}
 					}
-					else
-//						System.out.println(" >= " + (new ArrayList<Fraction>(Arrays.asList(d))).toString());
+					else {
 						negativeTrivial.add(new ArrayList<Fraction>(Arrays.asList(d)));
+						if (!d[varCount].isZero()) {
+							indexOfNonZeroTrivial.add(new Integer[] {
+									varAppearing.get(0), 1,
+									negativeTrivial.size() - 1 });
+//							valueOfNonZeroTrivial.add(d[varCount]);
+						}
+					}
 				}
 			}
 		}
