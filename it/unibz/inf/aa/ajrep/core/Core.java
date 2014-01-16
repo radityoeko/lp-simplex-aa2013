@@ -100,10 +100,10 @@ public class Core {
 			
 			StringBuilder sb = new StringBuilder();
 			for(int i = 0; i < varCount; i++) {
-				sb.append(parser.varNameList.get(i) + ": " + varAssignment.get(i).get(varCount).inverse() + "\n");
+				sb.append(parser.varNameList.get(i) + ": " + varAssignment.get(i).get(varCount).inverse() + "<br/>");
 			}
 			
-			System.out.println("Solution is " + solution+ "\n" + sb.toString());
+			System.out.println("Solution is " + solution+ "<br/>" + sb.toString());
 			return "Solution is " + solution + "\n" + sb.toString();
 			
 		} else {
