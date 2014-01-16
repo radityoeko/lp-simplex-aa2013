@@ -104,7 +104,7 @@ public class Core {
 			}
 			
 			System.out.println("Solution is " + solution+ "<br/>" + sb.toString());
-			return "Solution is " + solution + "\n" + sb.toString();
+			return "Solution is " + solution + "<br/>" + sb.toString();
 			
 		} else {
 			System.out
