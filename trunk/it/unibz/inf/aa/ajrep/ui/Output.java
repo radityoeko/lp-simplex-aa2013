@@ -292,7 +292,26 @@ public class Output extends JFrame {
             //zero coordinates
             final int zeroX = 100;
             final int zeroY = 150;
-            final int scale = 10; //scale px = 1
+            
+            //scale
+            Fraction bigest = new Fraction(0);
+            for (int i = 0; i < cMatrix.size(); i++) {
+                ArrayList<Fraction> c = cMatrix.get(i);
+                for (int j = 0; j < c.size(); j++) {
+                    if (calculator.compare(bigest, c.get(j)) == -1) {
+                        bigest = c.get(j);
+                    }
+                }
+            }
+            //scale px = 1
+            final int scale = 10;
+            /*final int maxPx = 60;
+            final int scale = 1 + (int) (maxPx / round((double) (bigest.getNumerator() * 1.0 / bigest.getDenomintor())));
+            Fraction multiplier = new Fraction(1);
+            if (scale == 1) {
+                multiplier = calculator.div(new Fraction(maxPx), bigest);
+                System.err.println(multiplier);
+            }*/
 
             g.drawString("X", 470, 140);
             g.drawString("Y", 110, 20);
